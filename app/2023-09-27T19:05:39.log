@@ -1,0 +1,4 @@
+2023/09/27 19:05:39.452515 app.go:16: [Info] Création Fiber App
+2023/09/27 19:05:39.454476 init.go:14: [Info] Récupération DataBase URL
+2023/09/27 19:05:39.454770 init.go:21: [Info] Starting server...
+2023/09/27 19:05:39.611028 init.go:39: [Info] Database connected

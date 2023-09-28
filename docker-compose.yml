@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: PostgresDB
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=michael
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=mydatabase
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  db-client:
+    image: dpage/pgadmin4:latest
+    container_name: PgAdmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=michael@example.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+    depends_on:
+      - db
+
+  go-app:
+    container_name: GoApp
+    ports:
+      - 3000:3000
+    build: .
+    environment:
+      - DATABASE_URL=postgres://michael:secret@db:5432/mydatabase
+    volumes:
+      - ./app:/app/logs
+    depends_on:
+      db: 
+        condition: service_healthy
